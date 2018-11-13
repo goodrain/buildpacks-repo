@@ -8,7 +8,7 @@ git:
 
 script:
 - docker build -t rainbond/buildpack-requirements:cedar-14 buildpack
-- docker run --rm -v ${PWD}/lang:/offline rainbond/buildpack-requirements:cedar-14 dev dev java,common
+- docker run --rm -v ${PWD}/lang:/offline rainbond/buildpack-requirements:cedar-14 dev java,common
 - sudo chmod -R 755 ${PWD}/lang
 - docker build -t rainbond/buildpack:$TRAVIS_BRANCH-v5.0 .
 - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
