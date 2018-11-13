@@ -10,11 +10,10 @@ VENDOR_URL="https://raw.githubusercontent.com/heroku/heroku-buildpack-go/master/
 # check download path
 [ -d "$download_path" ] || mkdir -p $download_path
 
-curl -s  $VENDOR_URL | grep -i url | grep http |awk '{print $2}' > /tmp/go
+curl -s  $VENDOR_URL | grep -i url | grep http |awk '{print $2}' | tr "\"" "\n" | grep -v "^$"  > /tmp/go
 pushd $download_path
     cat /tmp/go | while read line
     do
-        echo "download ${line##*/} ..."
-        wget -q ${line}
+        wget -q "${line}" && echo "download ${line##*/} ok"
     done
 popd

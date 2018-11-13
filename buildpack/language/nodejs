@@ -15,35 +15,32 @@ download_path="/offline/nodejs"
 
 # download node
 [ -d "$download_path/node/release/linux-x64" ] || mkdir -p $download_path/node/release/linux-x64
-curl -s  $node_url | grep url | awk '{print $2}' > /tmp/node
+curl -s  $node_url | grep url | awk '{print $2}' | tr "\"" "\n" | grep -v "^$" > /tmp/node
 pushd $download_path/node/release/linux-x64
     cat /tmp/node | while read line
     do
-        echo "download ${line##*/} ..."
-        wget -q ${line}
+        wget -q "${line}" && echo "download ${line##*/} ok"
     done
 popd
 
 # download yarn
 
 [ -d "$download_path/yarn/release" ] || mkdir -p $download_path/yarn/release
-curl -s  $yarn_url | grep url | awk '{print $2}' > /tmp/yarn
+curl -s  $yarn_url | grep url | awk '{print $2}' | tr "\"" "\n" | grep -v "^$" > /tmp/yarn
 pushd $download_path/yarn/release
     cat /tmp/yarn | while read line
     do
-        echo "download ${line##*/} ..."
-        wget -q ${line}
+        wget -q "${line}" && echo "download ${line##*/} ok"
     done
 popd
 
 # download iojs
 
 [ -d "$download_path/iojs/release" ] || mkdir -p $download_path/iojs/release
-curl -s  $iojs_url | grep url | awk '{print $2}' > /tmp/iojs
+curl -s  $iojs_url | grep url | awk '{print $2}' | tr "\"" "\n" | grep -v "^$" > /tmp/iojs
 pushd $download_path/iojs/release
     cat /tmp/iojs | while read line
     do
-        echo "download ${line##*/} ..."
-        wget -q ${line}
+        wget -q "${line}" && echo "download ${line##*/} ok"
     done
 popd
