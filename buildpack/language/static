@@ -1,0 +1,14 @@
+#!/bin/bash
+
+version="1.9.7"
+nginx_tarball_url="https://s3-external-1.amazonaws.com/heroku-buildpack-ruby/nginx/$stack/nginx-$version-ngx_mruby.tgz"
+
+download_path="/offline/static/"
+
+# check download path
+[ -d "$download_path" ] || mkdir -p $download_path
+
+pushd $download_path
+echo "download nginx"
+wget $nginx_tarball_url
+popd

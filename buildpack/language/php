@@ -1,0 +1,36 @@
+#!/bin/bash
+
+[ "$DEBUG" ] && set -xe
+
+version="cedar-14"
+download_path="/offline/php/"
+
+VENDOR_URL="https://lang-php.s3.amazonaws.com"
+
+# check download path
+[ -d "$download_path" ] || mkdir -p $download_path
+
+curl $VENDOR_URL -o /tmp/php
+cat /tmp/php | tr '<' '\n' | grep dist-cedar-14-stable | grep json | awk -F'>'  '{print $2}' > /tmp/download.php
+
+cd $download_path
+cat /tmp/download.php | while read line
+do
+        echo "download ${line##*/} ..."
+        wget -q $VENDOR_URL/${line}
+
+        url=$(jq -r '.dist.url' ${line##*/})
+        path01=$(echo $url | awk -F '/' '{print $5}')
+        path02=$(echo $url | awk -F '/' '{print $6}')
+        echo "fix ${line##*/} ..."
+        sed -i "s#https://lang-php.s3.amazonaws.com#http://lang.goodrain.me/php#g" ${line##*/}
+        if [ ! -z "$path02" ];then
+            [ -d "$path01/$path02" ] ||  mkdir -p $path01/$path02
+            pushd $path01/$path02
+                echo "download $path01/$path02 --> ${url##*/} ..."
+                wget -q $url
+            popd
+        else
+            wget -q $url
+        fi
+done

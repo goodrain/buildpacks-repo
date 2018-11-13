@@ -1,0 +1,20 @@
+#!/bin/bash
+
+[ "$DEBUG" ] && set -xe
+
+version="cedar-14"
+download_path="/offline/go/"
+
+VENDOR_URL="https://raw.githubusercontent.com/heroku/heroku-buildpack-go/master/files.json"
+
+# check download path
+[ -d "$download_path" ] || mkdir -p $download_path
+
+curl -s  $VENDOR_URL | grep -i url | grep http |awk '{print $2}' > /tmp/go
+pushd $download_path
+    cat /tmp/go | while read line
+    do
+        echo "download ${line##*/} ..."
+        wget -q ${line}
+    done
+popd
