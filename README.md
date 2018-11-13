@@ -1,3 +1,3 @@
-[![Build Status](https://travis-ci.org/goodrain/buildpacks-repo.svg?branch=master)](https://travis-ci.org/goodrain/buildpacks-repo)
+[![Build Status](https://travis-ci.org/goodrain/buildpacks-repo.svg?branch=nodejs)](https://travis-ci.org/goodrain/buildpacks-repo)
 
-离线环境buildpack
+> offline nodejs buildpack
