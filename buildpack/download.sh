@@ -26,6 +26,17 @@ elif [ "$1" == "dev" ];then
             fi
         )
     done
+elif [ "$1" == "build_all" ];then
+    for lang in ${language[@]}
+    do
+        if [ -f "/language/${lang}.all" ];then
+            echo "Installing all ${lang} requirements"
+            /language/${lang}.all
+        else
+            echo "Installing ${lang} requirements"
+            /language/${lang}
+        fi
+    done
 else
     if [ -f "/language/${lang_dev}" ];then
         echo "Installing ${lang_dev} requirements."
