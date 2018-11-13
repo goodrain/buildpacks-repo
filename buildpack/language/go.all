@@ -4,24 +4,16 @@
 
 version="cedar-14"
 download_path="/offline/go/"
+
 VENDOR_URL="https://raw.githubusercontent.com/heroku/heroku-buildpack-go/master/files.json"
-go_version=(go1.9.7 go1.8.7 go1.11.2 go1.11 go1.11.1 go1.10.5 go1.10.4)
 
 # check download path
 [ -d "$download_path" ] || mkdir -p $download_path
 
 curl -s  $VENDOR_URL | grep -i url | grep http |awk '{print $2}' | tr "\"" "\n" | grep -v "^$"  > /tmp/go
 pushd $download_path
-    cat /tmp/go | grep -v "google" > /tmp/nogo
-    cat /tmp/go | grep  "google" > /tmp/yesgo
-    cat /tmp/nogo | while read line
+    cat /tmp/go | while read line
     do
-        wget -q "${line}" && echo "download ${line##*/} ok"
-    done
-
-    for gov in ${go_version[@]}
-    do
-        line=$(cat /tmp/yesgo | grep $gov )
         wget -q "${line}" && echo "download ${line##*/} ok"
     done
 popd
