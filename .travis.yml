@@ -8,12 +8,11 @@ git:
 
 script:
 - docker build -t rainbond/buildpack-requirements:cedar-14 buildpack
-- docker run --rm -v ${PWD}/lang:/offline rainbond/buildpack-requirements:cedar-14
+- docker run --rm -v ${PWD}/lang:/offline rainbond/buildpack-requirements:cedar-14 dev go,common
 - sudo chmod -R 755 ${PWD}/lang
-- docker build -t rainbond/buildpack:all-$TRAVIS_BRANCH .
+- docker build -t rainbond/buildpack:$TRAVIS_BRANCH-v5.0 .
 - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-- docker push rainbond/buildpack:all-$TRAVIS_BRANCH 
-- docker push rainbond/buildpack-requirements:cedar-14
+- docker push rainbond/buildpack:all-$TRAVIS_BRANCH-v5.0 
 
 
 
