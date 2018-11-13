@@ -9,7 +9,7 @@ node_url=${VENDOR_URL}/v1/node/linux-x64
 yarn_url=${VENDOR_URL}/v1/yarn/linux-x64
 iojs_url=${VENDOR_URL}/v1/iojs/linux-x64
 download_path="/offline/nodejs"
-nodeversion=(0.10.9 0.11.9 0.12.9 10.13.0 11.1.0 4.9.1 5.12.0 6.14.4 7.10.1 8.12.0 9.11.2)
+
 # check download path
 [ -d "$download_path" ] || mkdir -p $download_path
 
@@ -17,9 +17,8 @@ nodeversion=(0.10.9 0.11.9 0.12.9 10.13.0 11.1.0 4.9.1 5.12.0 6.14.4 7.10.1 8.12
 [ -d "$download_path/node/release/linux-x64" ] || mkdir -p $download_path/node/release/linux-x64
 curl -s  $node_url | grep url | awk '{print $2}' | tr "\"" "\n" | grep -v "^$" > /tmp/node
 pushd $download_path/node/release/linux-x64
-    for nodev in ${nodeversion[@]}
+    cat /tmp/node | while read line
     do
-        line=$(cat /tmp/node| grep $nodev)
         wget -q "${line}" && echo "download ${line##*/} ok"
     done
 popd
