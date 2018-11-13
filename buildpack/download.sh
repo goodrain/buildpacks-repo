@@ -14,6 +14,18 @@ if [ "$lang_dev" == "all" ];then
     done
 elif [ "$1" == "bash" ];then
     exec /bin/bash
+elif [ "$1" == "dev" ];then
+    lang_dev_build=$2
+    for lang in $(echo $lang_dev_build | tr ',' ' ' )
+    do
+        echo ${language[@]} | grep "$lang" > /dev/null
+        [ "$?" -eq 0  ] && (
+            if [ -f "/language/${lang}" ];then
+            echo "Installing ${lang} requirements"
+            /language/${lang}
+            fi
+        )
+    done
 else
     if [ -f "/language/${lang_dev}" ];then
         echo "Installing ${lang_dev} requirements."
