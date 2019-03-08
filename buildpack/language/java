@@ -44,18 +44,18 @@ dl_java(){
     echo "download jetty-runner"
     [ -d "$download_path/jetty-runner" ] || mkdir -p $download_path/jetty-runner
     pushd $download_path/jetty-runner
-    for jetty-runner in ${java_jetty[@]}
+    for jpkg in ${java_jetty[@]}
     do
-        wget -q "${vendor_url}/jetty-runner/${jetty-runner}" && echo "download ${vendor_url}/jetty-runner/${jetty-runner} ok"
+        wget -q "${vendor_url}/jetty-runner/${jpkg}" && echo "download ${vendor_url}/jetty-runner/${jpkg} ok"
     done
     popd
 
     echo "download webapp-runner"
     [ -d "$download_path/webapp-runner" ] || mkdir -p $download_path/webapp-runner
     pushd $download_path/webapp-runner
-    for webapp-runner in ${java_webapp[@]}
+    for wpkg in ${java_webapp[@]}
     do
-        wget -q "${vendor_url}/webapp-runner/${webapp-runner}" && echo "download ${vendor_url}/webapp-runner/${webapp-runner} ok"
+        wget -q "${vendor_url}/webapp-runner/${wpkg}" && echo "download ${vendor_url}/webapp-runner/${wpkg} ok"
     done
     popd
 }
