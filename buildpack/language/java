@@ -61,7 +61,7 @@ dl_java(){
 }
 
 dl_jdk(){
-    local java_jdks=(openjdk1.6.0_27.tar.gz openjdk1.7.0_181.tar.gz openjdk1.8.0_171.tar.gz openjdk10.0.1.tar.gz openjdk11-ea-24.tar.gz openjdk9.0.4.tar.gz)
+    local java_jdks=(openjdk1.6.0_27.tar.gz openjdk1.7.0_151.tar.gz openjdk1.7.0_95.tar.gz openjdk1.8.0_191.tar.gz openjdk1.8.0_74.tar.gz openjdk1.9-latest.tar.gz openjdk10.0.2.tar.gz openjdk11.0.1.tar.gz openjdk9.0.4.tar.gz)
     local download_path=${OFFLINE_BASE}/jdk/cedar-14
     local vendor_url="${OSS_URL}/jdk/cedar-14"
     [ -d "${download_path}" ] || mkdir -p ${download_path}
