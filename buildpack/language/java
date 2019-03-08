@@ -1,40 +1,100 @@
 #!/bin/bash
 
-VENDOR_URL="http://buildpack.rainbond.com/java"
+OSS_URL="http://buildpack.rainbond.com"
+OFFLINE_BASE="/offline"
 
-download_path="/offline/java/"
-java_base=(jvm.tgz stdlib.sh pgconfig.jar)
-java_jdks=(openjdk1.6.0_27.tar.gz openjdk1.7.0_181.tar.gz openjdk1.8.0_171.tar.gz openjdk10.0.1.tar.gz openjdk11-ea-24.tar.gz openjdk9.0.4.tar.gz)
-java_maven_versions=(3.0.5 3.1.1 3.2.3 3.2.5 3.3.9)
+[ -d "${OFFLINE_BASE}" ] || mkdir -p ${OFFLINE_BASE}
 
-# check download path
-[ -d "$download_path" ] || mkdir -p $download_path
+dl_java(){
+    local java_base=(apache-maven-3.0.5-bin.tar.gz apache-maven-3.1.1-bin.tar.gz apache-maven-3.2.5-bin.tar.gz apache-maven-3.3.1-bin.tar.gz jvm-new.tgz jvm.tgz maven-3.0.5.tar.gz maven-3.1.1.tar.gz maven-3.2.5.tar.gz maven-3.3.1.tar.gz maven-3.3.9.tar.gz new-jvm.tgz stdlib.sh pgconfig.jar)
+    local java_jdks=(openjdk1.6.0_27.tar.gz openjdk1.7.0_181.tar.gz openjdk1.8.0_171.tar.gz openjdk10.0.1.tar.gz openjdk11-ea-24.tar.gz openjdk9.0.4.tar.gz)
+    local java_jetty=(jetty-runner-7.5.4.v20111024.jar jetty-runner-9.4.0.v20161208.jar)
+    local java_webapp=(webapp-runner-7.0.57.2.jar webapp-runner-7.0.91.0.jar webapp-runner-8.0.18.0-M1.jar webapp-runner-8.0.52.0.jar webapp-runner-8.5.38.0.jar webapp-runner-8.5.5.2.jar webapp-runner-9.0.16.0.jar)
+    local java_maven_versions=(3.0.5 3.1.1 3.2.3 3.2.5 3.3.9)
+    local download_path=${OFFLINE_BASE}/java
+    local vendor_url="${OSS_URL}/java"
+    [ -d "${download_path}" ] || mkdir -p ${download_path}
 
-# download pkg
+    echo "download base"
+    pushd $download_path
+    for pkg in ${java_base[@]}
+    do
+        wget -q "${vendor_url}/${pkg}" && echo "download ${vendor_url}/${pkg} ok"
+    done
+    popd
 
-pushd $download_path
-for pkg in ${java_base[@]}
-do
-    wget -q "${VENDOR_URL}/${pkg}" && echo "download ${VENDOR_URL}/${pkg} ok"
-done
-popd
+    echo "download jdks"
+    [ -d "$download_path/jdk" ] || mkdir -p $download_path/jdk
+    pushd $download_path/jdk
+    for jdk in ${java_jdks[@]}
+    do
+        wget -q  "${vendor_url}/jdk/${jdk}" && echo "download ${vendor_url}/${jdk} ok"
+    done
+    popd
 
-# download jdk
-echo "download all jdk"
-[ -d "$download_path/jdk" ] || mkdir -p $download_path/jdk
-pushd $download_path/jdk
-for jdk in ${java_jdks[@]}
-do
-    wget -q  "${VENDOR_URL}/jdk/${jdk}" && echo "download ${VENDOR_URL}/${jdk} ok"
-done
-popd
+    echo "download maven"
+    [ -d "$download_path/maven" ] || mkdir -p $download_path/maven
+    pushd $download_path/maven
+    for maven in ${java_maven_versions[@]}
+    do
+        wget -q "${vendor_url}/maven/maven-${maven}.tar.gz" && echo "download ${vendor_url}/maven-${maven}.tar.gz ok"
+    done
+    popd
 
-# download maven
-echo "download all maven"
-[ -d "$download_path/maven" ] || mkdir -p $download_path/maven
-pushd $download_path/maven
-for maven in ${java_maven_versions[@]}
-do
-    wget -q "${VENDOR_URL}/maven/maven-${maven}.tar.gz" && echo "download ${VENDOR_URL}/maven-${maven}.tar.gz ok"
-done
-popd
+    echo "download jetty-runner"
+    [ -d "$download_path/jetty-runner" ] || mkdir -p $download_path/jetty-runner
+    pushd $download_path/jetty-runner
+    for jetty-runner in ${java_jetty[@]}
+    do
+        wget -q "${vendor_url}/jetty-runner/${jetty-runner}" && echo "download ${vendor_url}/jetty-runner/${jetty-runner} ok"
+    done
+    popd
+
+    echo "download webapp-runner"
+    [ -d "$download_path/webapp-runner" ] || mkdir -p $download_path/webapp-runner
+    pushd $download_path/webapp-runner
+    for webapp-runner in ${java_webapp[@]}
+    do
+        wget -q "${vendor_url}/webapp-runner/${webapp-runner}" && echo "download ${vendor_url}/webapp-runner/${webapp-runner} ok"
+    done
+    popd
+}
+
+dl_jdk(){
+    local java_jdks=(openjdk1.6.0_27.tar.gz openjdk1.7.0_181.tar.gz openjdk1.8.0_171.tar.gz openjdk10.0.1.tar.gz openjdk11-ea-24.tar.gz openjdk9.0.4.tar.gz)
+    local download_path=${OFFLINE_BASE}/jdk/cedar-14
+    local vendor_url="${OSS_URL}/jdk/cedar-14"
+    [ -d "${download_path}" ] || mkdir -p ${download_path}
+
+    echo "download jdk"
+    pushd $download_path
+    for pkg in ${java_jdks[@]}
+    do
+        wget -q "${vendor_url}/${pkg}" && echo "download ${vendor_url}/${pkg} ok"
+    done
+    popd
+}
+
+dl_jvm(){
+    local base=(pgconfig.jar jvm.tgz jvm-common.tgz jvm-common-alish.tgz buildpack-jvm-utils-0.1.jar gradle-2.6-bin.zip gradle-3.2.1-bin.custom.zip gradle-3.2.1-bin.zip)
+    local download_path=${OFFLINE_BASE}/jvm
+    local vendor_url="${OSS_URL}/jvm"
+    [ -d "${download_path}" ] || mkdir -p ${download_path}
+
+    echo "download jvm"
+    pushd $download_path
+    for pkg in ${base[@]}
+    do
+        wget -q "${vendor_url}/${pkg}" && echo "download ${vendor_url}/${pkg} ok"
+    done
+    popd
+}
+
+
+case $1 in
+    *)
+        dl_java
+        dl_jdk
+        dl_jvm
+    ;;
+esac
