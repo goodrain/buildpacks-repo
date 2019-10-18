@@ -1,15 +1,28 @@
 #!/bin/bash
 
-version="1.9.7"
+version="1.14.2"
 stack="cedar-14"
-nginx_tarball_url="https://s3-external-1.amazonaws.com/heroku-buildpack-ruby/nginx/$stack/nginx-$version-ngx_mruby.tgz"
+nginx_tarball_url="https://buildpack.oss-cn-shanghai.aliyuncs.com/static/r6d/nginx/nginx-${version}.tar.gz"
 
-download_path="/offline/static/"
+APACHE_VERSION="2.2.19"
+APACHE_PATH="apache"
+APACHE_URL="https://buildpack.oss-cn-shanghai.aliyuncs.com/static/apache-$APACHE_VERSION.tar.gz"
+
+nginx_download_path="/offline/static/r6d/nginx"
+apache_download_path="/offline/static"
 
 # check download path
-[ -d "$download_path" ] || mkdir -p $download_path
+[ -d "$nginx_download_path" ] || mkdir -p $nginx_download_path
 
-pushd $download_path
+pushd $nginx_download_path
 echo "download nginx"
 wget $nginx_tarball_url
+popd
+
+# check download path
+[ -d "$apache_download_path" ] || mkdir -p $apache_download_path
+
+pushd $apache_download_path
+echo "download apache"
+wget $APACHE_URL
 popd

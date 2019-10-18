@@ -4,22 +4,24 @@
 
 version="cedar-14"
 
-VENDOR_URL="https://nodebin.herokai.com"
-node_url=${VENDOR_URL}/v1/node/linux-x64
-yarn_url=${VENDOR_URL}/v1/yarn/linux-x64
-iojs_url=${VENDOR_URL}/v1/iojs/linux-x64
+VENDOR_URL="https://buildpack.oss-cn-shanghai.aliyuncs.com"
+node_url=${VENDOR_URL}/nodejs/node/release/linux-x64
+yarn_url=${VENDOR_URL}/nodejs/yarn/release/
+iojs_url=${VENDOR_URL}/nodejs/iojs/release/
 download_path="/offline/nodejs"
-nodeversion=(0.10.9 0.11.9 0.12.9 10.13.0 11.1.0 4.9.1 5.12.0 6.14.4 7.10.1 8.12.0 9.11.2)
+nodeversion=(0.10.48 0.10.9 0.11.9 0.12.18 0.12.9 10.13.0 10.9.0 11.1.0 4.8.7 4.9.1 5.12.0 6.12.3 6.14.4 7.10.1 8.11.4 8.12.0 8.9.3 8.9.4 9.11.2 9.3.0)
+yarnversion=(1.9.4)
+iojsversion=(2.5.0 3.3.1)
 # check download path
 [ -d "$download_path" ] || mkdir -p $download_path
 
 # download node
 [ -d "$download_path/node/release/linux-x64" ] || mkdir -p $download_path/node/release/linux-x64
-curl -s  $node_url | grep url | awk '{print $2}' | tr "\"" "\n" | grep -v "^$" > /tmp/node
+#curl -s  $node_url | grep url | awk '{print $2}' | tr "\"" "\n" | grep -v "^$" > /tmp/node
 pushd $download_path/node/release/linux-x64
     for nodev in ${nodeversion[@]}
     do
-        line=$(cat /tmp/node| grep $nodev)
+        line=${node_url}/node-v${nodev}-linux-x64.tar.gz
         wget -q "${line}" && echo "download ${line##*/} ok"
     done
 popd
@@ -27,10 +29,11 @@ popd
 # download yarn
 
 [ -d "$download_path/yarn/release" ] || mkdir -p $download_path/yarn/release
-curl -s  $yarn_url | grep url | awk '{print $2}' | tr "\"" "\n" | grep -v "^$" > /tmp/yarn
+#curl -s  $yarn_url | grep url | awk '{print $2}' | tr "\"" "\n" | grep -v "^$" > /tmp/yarn
 pushd $download_path/yarn/release
-    cat /tmp/yarn | while read line
+    for yarnv in ${yarnversion[@]}
     do
+        line=${yarn_url}/yarn-v${yarnv}.tar.gz
         wget -q "${line}" && echo "download ${line##*/} ok"
     done
 popd
@@ -38,10 +41,11 @@ popd
 # download iojs
 
 [ -d "$download_path/iojs/release" ] || mkdir -p $download_path/iojs/release
-curl -s  $iojs_url | grep url | awk '{print $2}' | tr "\"" "\n" | grep -v "^$" > /tmp/iojs
+#curl -s  $iojs_url | grep url | awk '{print $2}' | tr "\"" "\n" | grep -v "^$" > /tmp/iojs
 pushd $download_path/iojs/release
-    cat /tmp/iojs | while read line
+    for iojsv in ${iojsversion[@]}
     do
+        line=${iojs_url}/v${iojsv}/iojs-v${iojsv}-linux-x64.tar.gz
         wget -q "${line}" && echo "download ${line##*/} ok"
     done
 popd

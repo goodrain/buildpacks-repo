@@ -1,40 +1,72 @@
 #!/bin/bash
 
-VENDOR_URL="http://buildpack.rainbond.com/java"
+VENDOR_URL="https://buildpack.oss-cn-shanghai.aliyuncs.com"
 
-download_path="/offline/java/"
-java_base=(jvm.tgz stdlib.sh pgconfig.jar)
-java_jdks=(openjdk1.6.0_27.tar.gz openjdk1.7.0_181.tar.gz openjdk1.8.0_171.tar.gz openjdk10.0.1.tar.gz openjdk11-ea-24.tar.gz openjdk9.0.4.tar.gz)
-java_maven_versions=(3.0.5 3.1.1 3.2.3 3.2.5 3.3.9)
+java_path="/offline/java"
+jvm_path="/offline/jvm"
+jdk_path="/offline/jdk/cedar-14"
+maven_path="${jvm_path}/maven"
+webapp_runner_path="${java_path}/webapp-runner"
+jetty_runner_path="${java_path}/jetty-runner"
+
+
+java_base=(stdlib.sh)
+jvm_base=(jvm-common.tgz pgconfig.jar jvm-common-alish.tgz)
+java_jdks=(1.6.0_27 1.7.0_151 1.7.0_201 1.7.0_95 1.8.0_191 1.8.0_201 1.8.0_74 1.9-latest 10.0.2 11.0.1 11.0.2 9.0.4)
+java_maven_versions=(3.0.5 3.1.1 3.2.5 3.3.1 3.3.9)
+webapp_runner_versions=(9.0.16.0 8.5.38.0 8.0.52.0 7.0.91.0)
+jetty_runner_versions=(9.4.0.v20161208 7.5.4.v20111024)
+
 
 # check download path
-[ -d "$download_path" ] || mkdir -p $download_path
+[ -d "$java_path" ] || mkdir -p $java_path
+[ -d "$jvm_path" ] || mkdir -p $jvm_path
 
 # download pkg
 
-pushd $download_path
+pushd $java_path
 for pkg in ${java_base[@]}
 do
-    wget -q "${VENDOR_URL}/${pkg}" && echo "download ${VENDOR_URL}/${pkg} ok"
+    wget -q "${VENDOR_URL}/java/${pkg}" && echo "download ${VENDOR_URL}//java/${pkg} ok"
 done
 popd
 
 # download jdk
 echo "download all jdk"
-[ -d "$download_path/jdk" ] || mkdir -p $download_path/jdk
-pushd $download_path/jdk
+[ -d "$jdk_path" ] || mkdir -p $jdk_path
+pushd $jdk_path
 for jdk in ${java_jdks[@]}
 do
-    wget -q  "${VENDOR_URL}/jdk/${jdk}" && echo "download ${VENDOR_URL}/${jdk} ok"
+    wget -q  "${VENDOR_URL}/jdk/cedar-14/openjdk${jdk}.tar.gz" && echo "download ${VENDOR_URL}/jdk/cedar-14/openjdk${jdk}.tar.gz ok"
 done
 popd
 
 # download maven
 echo "download all maven"
-[ -d "$download_path/maven" ] || mkdir -p $download_path/maven
-pushd $download_path/maven
+[ -d "$maven_path" ] || mkdir -p $maven_path
+pushd $maven_path
 for maven in ${java_maven_versions[@]}
 do
-    wget -q "${VENDOR_URL}/maven/maven-${maven}.tar.gz" && echo "download ${VENDOR_URL}/maven-${maven}.tar.gz ok"
+    wget -q "${VENDOR_URL}/jvm/maven/maven-${maven}.tar.gz" && echo "download ${VENDOR_URL}/jvm/maven/maven-${maven}.tar.gz ok"
+done
+popd
+
+# download webapp-runner
+echo "download all webapp-runner"
+[ -d "$webapp_runner_path" ] || mkdir -p $webapp_runner_path
+pushd $webapp_runner_path
+for webapp_runner_ver in ${webapp_runner_versions[@]}
+do
+    wget -q "${VENDOR_URL}/java/webapp-runner/webapp-runner-${webapp_runner_ver}.jar" && echo "download ${VENDOR_URL}/java/webapp-runner/webapp-runner-${webapp_runner_ver}.jar ok"
+done
+popd
+
+# download jetty-runner
+echo "download all jetty-runner"
+[ -d "$jetty_runner_path" ] || mkdir -p $jetty_runner_path
+pushd $jetty_runner_path
+for jetty_runner_ver in ${jetty_runner_versions[@]}
+do
+    wget -q "${VENDOR_URL}/java/jetty-runner/jetty-runner-${jetty_runner_ver}.jar" && echo "download ${VENDOR_URL}/java/jetty-runner/jetty-runner-${jetty_runner_ver}.jar ok"
 done
 popd
